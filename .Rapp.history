@@ -1,0 +1,1026 @@
+#
+uncommon.art = uncommon(common.art, common.music)#
+uncommon.music = uncommon(common.music, common.art)
+uncommon.art
+c(uncommon.art, uncommon.music)
+#
+get.word.indices = function(dictionary, uncommon){#
+	result = c()#
+	for (word in uncommon){#
+		result = c(result, which(dictionary == word))#
+	}#
+	return(result)#
+}
+uncommon = c(uncommon.art, uncommon.music)
+get.word.indices(dictionary, uncommon)
+word.indices = get.word.indices(dictionary, uncommmon)
+word.indices = get.word.indices(dictionary, uncommon)
+# makes the vectors only be the uncommon word occurences#
+small.vectors = function(files, word.indices){#
+	# get the indices#
+	result = list()#
+	for (file in files){#
+		vector.new = rep(0, length(word.indices))#
+		for (index in seq(1, length(word.indices)){#
+			word.index = word.indices[index]#
+			if (is.na(file[word.index])){#
+				vector.new[index] = 0#
+			}#
+			else{#
+				vector.new[index] = file[word.index]#
+			}#
+		}#
+		result = c(result, vector.new)#
+	}#
+}
+#
+#Takes in files and indices #
+# makes the vectors only be the uncommon word occurences#
+small.vectors = function(files, word.indices){#
+	# get the indices#
+	result = list()#
+	for (file in files){#
+		vector.new = rep(0, length(word.indices))#
+		for (index in seq(1, length(word.indices))){#
+			word.index = word.indices[index]#
+			if (is.na(file[word.index])){#
+				vector.new[index] = 0#
+			}#
+			else{#
+				vector.new[index] = file[word.index]#
+			}#
+		}#
+		result = c(result, vector.new)#
+	}#
+}
+files.art.small = small.vectors(files.art, words.indices)
+words.indices = get.word.indices(dictionary, uncommon)
+files.art.small = small.vectors(files.art, words.indices)
+length(files.art.small)
+#
+small.vectors = function(files, word.indices){#
+	# get the indices#
+	result = list()#
+	for (file in files){#
+		vector.new = rep(0, length(word.indices))#
+		for (index in seq(1, length(word.indices))){#
+			word.index = word.indices[index]#
+			if (is.na(file[word.index])){#
+				vector.new[index] = 0#
+			}#
+			else{#
+				vector.new[index] = file[word.index]#
+			}#
+		}#
+		result = c(result, vector.new)#
+	}#
+	return(result)#
+}
+files.art.small = small.vectors(files.art, words.indices)
+files.art.small
+a = list()
+a[[1]]
+a[[1]] = 1
+length(a)
+small.vectors = function(files, word.indices){#
+	# get the indices#
+	result = list()#
+	for (file in files){#
+		vector.new = rep(0, length(word.indices))#
+		for (index in seq(1, length(word.indices))){#
+			word.index = word.indices[index]#
+			if (is.na(file[word.index])){#
+				vector.new[index] = 0#
+			}#
+			else{#
+				vector.new[index] = file[word.index]#
+			}#
+		}#
+		result[[length(result) + 1]] = vector.new#
+	}#
+	return(result)#
+}
+files.art.small = small.vectors(files.art, words.indices)
+length(riles.art.small)
+length(files.art.small)
+length(files.art)
+files.art.small[[1]]
+files.art.small[[3]]
+files.art.small[[12]]
+#
+files.art.small = small.vectors(files.art, words.indices)#
+files.music.small = small.vectors(files.art, words.indices)
+files.art.small
+length(files.art.small[[41]])
+length(files.art.small[[57]])
+length(uncommmon)
+length(uncommon)
+length(files.art)
+files.music.small
+uncommon
+files.art.small
+data.frame(files.art.small)
+df = data.frame(files.art.small)
+names(df)
+names(df)= c(seq(1, 76))
+df.art = data.frame(unlist(files.art.small), cols = 57)
+df.art
+df.art = data.frame(matrix(unlist(files.art.small), ncol = 57))
+df.art
+names(df.art)
+df.art$X1
+# Eliot Knudsen#
+# Feature Vector Constuction Module#
+#
+library(MASS)#
+#
+#
+################ Important Design Decisions ##########
+#
+##### Still need to determine exactly how to pass around the dictionary#
+### Option 1: pass it around the different functions to keep synced#
+### Option 2: declare it as global --- This is the option I picked#
+#
+#
+#### Need to choose the specific pattern#
+#
+###############################
+#
+#redefine global dictionary#
+dictionary <<- c()#
+#
+#This takes in a list of vectors with bag of words#
+#Out puts this same list of vectors but making sure all the vectors have the same length#
+fill.vector = function(list.vecs){#
+	for ( vector in list.vecs){#
+		if ( length(vector) != length(dictionary)){#
+			vector = c(vector, rep(0, length(dictionary) - length(vector)))#
+		}#
+	}#
+}#
+#
+# takes in a list of words and a dictionary (ie another list of words)#
+# returns a list of number that correspond to the dictionary#
+# each number is the number of times that the dictionary word appeared in the list of words#
+findOccurences = function(words){#
+#
+	occurences = rep(0, length(dictionary))#
+	for (word in words){#
+		if (word %in% dictionary){#
+			#find where in dictionary the word is#
+			word.index = which( word == dictionary) # Should return a unique index#
+			#
+			#Increment#
+			occurences[word.index] = occurences[word.index] + 1#
+			}#
+		else{#
+			#add new word to the global dictionary#
+			dictionary[length(dictionary) + 1] <<- word#
+			occurences[length(dictionary) + 1] = 1#
+		}#
+	}#
+#
+	return(occurences)#
+}#
+#
+####### Bug Occurences tends to have 1 NA at beginning########
+#
+#Takes in the full text of a file#
+#returns a vector of the words of the text#
+parseText = function(fullText){#
+	#
+	# Strip out <p>, spaces and punctuation besides '#
+	pat = "[[:alpha:][:digit:]]+"  # Not exactly sure what this pattern should be#
+	#
+	# Reg exp gibberish I don't really understand#
+	m = gregexpr(pat, fullText, ignore.case = TRUE)#
+	x = regmatches(fullText, m)#
+	x = do.call(c, x)#
+	m = regexec(pat, x, ignore.case = TRUE)#
+    words = regmatches(x, m)#
+    words = do.call(c, words)#
+#
+	#lowercase stuff#
+	words = tolower(words)#
+#
+	# words is vector of character type now#
+	#
+	return(words)#
+}#
+#
+#
+#This function takes in the words of a file and a dictionary#
+# Outputs a feature vector in the form: #
+# {dictionary.word.i: occurances} - this is a vector#
+getVector = function(fullText){#
+	#
+	# words is now a vector of all the pure words that appear in this text#
+	words = parseText(fullText)#
+	#
+	# construct the vector of occurances#
+	occ = findOccurences(words)#
+	#
+	return (occ)#
+}#
+#
+#Takes element to a directory -> a vector of XML data#
+#grabs only the useful data#
+#returns a string without any tags#
+grabFullText = function(file.root){#
+	#
+	#reads in the XML#
+	data.xml = readLines(file.root)#
+	#
+	# These are two unique XML tages which begin the full text#
+	# Note that end is 1 after the end #
+	start = "<block class=\"full_text\">"#
+	end = "</body.content>"#
+	#
+	# Search though our xml data#
+	vect.start = grep(start, data.xml) + 2 # Note add 2 because you need to remove the lead#
+	vect.end = grep(end, data.xml) -3 # Substract 2 because you need to remove the block#
+#
+	result = data.xml[seq(vect.start, vect.end)]#
+	#
+	return(paste(result, collapse = ""))#
+}#
+#
+#
+#Takes in a working directory of files#
+#Reads in all the different files and converts them into feature vectors#
+# returns a list of feature vectors with 1 vector as each file #
+getFiles = function(directory){#
+	#
+	#constructs a list of directory of files#
+	files = paste(directory, list.files(directory), sep = "/")#
+	#
+	# This should return a list of full text of content#
+	files.fullText = lapply(files, grabFullText)#
+#
+	# This should return a list of bag of words 	#
+	files.vectors = lapply(files.fullText, getVector)#
+#
+	return(files.vectors)#
+}
+### This file should take in a dictionary and list of vectors#
+### returns a vector with the 300 most common words in no particular order#
+#
+#
+common = function(list.vecs, dictionary){#
+	total.words = rep(0, length(dictionary))#
+	for (word in seq(1,length(dictionary))){#
+		word.sum = 0#
+		for (document in list.vecs){#
+			if( !is.na(document[word])){#
+				word.sum = word.sum + document[word]#
+			}#
+		}#
+		total.words[word] = word.sum#
+	}#
+	cutoff = sort(total.words, decreasing = TRUE)[150]#
+	#
+	return(dictionary[total.words > cutoff])#
+	#
+}#
+#
+root.art = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/art'#
+root.music = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/music'#
+#
+files.art = getFiles(root.art)#
+files.music = getFiles(root.music)#
+#
+common.art = common(files.art, dictionary)#
+common.music = common(files.music, dictionary)#
+#
+#
+uncommon = function(words.this, words.that){#
+	result = c()#
+	for (word in words.this)#
+	{#
+		if ( word %in% words.that){ #
+			result = result#
+			}#
+		else {#
+			result = c(result, word)#
+		}#
+	}#
+	return(result)#
+}#
+#
+uncommon.art = uncommon(common.art, common.music)#
+uncommon.music = uncommon(common.music, common.art)#
+uncommon = c(uncommon.art, uncommon.music)#
+#
+get.word.indices = function(dictionary, uncommon){#
+	result = c()#
+	for (word in uncommon){#
+		result = c(result, which(dictionary == word))#
+	}#
+	return(result)#
+}#
+#
+words.indices = get.word.indices(dictionary, uncommon)#
+#
+#Takes in files and indices #
+# makes the vectors only be the uncommon word occurences#
+small.vectors = function(files, word.indices){#
+	# get the indices#
+	result = list()#
+	for (file in files){#
+		vector.new = rep(0, length(word.indices))#
+		for (index in seq(1, length(word.indices))){#
+			word.index = word.indices[index]#
+			if (is.na(file[word.index])){#
+				vector.new[index] = 0#
+			}#
+			else{#
+				vector.new[index] = file[word.index]#
+			}#
+		}#
+		result[[length(result) + 1]] = vector.new#
+	}#
+	return(result)#
+}#
+#
+files.art.small = small.vectors(files.art, words.indices)#
+files.music.small = small.vectors(files.art, words.indices)#
+#
+df.art = data.frame(matrix(unlist(files.art.small), ncol = 57))#
+df.music = data.frame(matrix(unlist(files.music.small), ncol = 57))
+files = length(files.art)
+files
+df.art = data.frame(matrix(unlist(files.art.small), ncol = files.number))
+files.number = length(files.art)
+df.art = data.frame(matrix(unlist(files.art.small), ncol = files.number))
+df.music = data.frame(matrix(unlist(files.music.small), ncol = files.number))
+length(files.music)
+files.number = length(word.indices)
+df.art = data.frame(matrix(unlist(files.art.small), ncol = files.number))
+df.music = data.frame(matrix(unlist(files.music.small), ncol = files.number))
+length(df.art)
+length(df.music)
+length(df.art)
+names(df.art)
+length(df.art$X1)
+legnth(df.music$X1)
+length(df.music$X1)
+length(files.music)
+uncommon
+length(files.music.small)
+df.music = data.frame(matrix(unlist(files.music.small), ncol = files.number))
+files.music.small = small.vectors(files.music, words.indices)
+df.music = data.frame(matrix(unlist(files.music.small), ncol = files.number))
+length(df.music$X1)
+df.music
+# Eliot Knudsen#
+# Feature Vector Constuction Module#
+#
+library(MASS)#
+#
+#
+################ Important Design Decisions ##########
+#
+##### Still need to determine exactly how to pass around the dictionary#
+### Option 1: pass it around the different functions to keep synced#
+### Option 2: declare it as global --- This is the option I picked#
+#
+#
+#### Need to choose the specific pattern#
+#
+###############################
+#
+#redefine global dictionary#
+dictionary <<- c()#
+#
+#This takes in a list of vectors with bag of words#
+#Out puts this same list of vectors but making sure all the vectors have the same length#
+fill.vector = function(list.vecs){#
+	for ( vector in list.vecs){#
+		if ( length(vector) != length(dictionary)){#
+			vector = c(vector, rep(0, length(dictionary) - length(vector)))#
+		}#
+	}#
+}#
+#
+# takes in a list of words and a dictionary (ie another list of words)#
+# returns a list of number that correspond to the dictionary#
+# each number is the number of times that the dictionary word appeared in the list of words#
+findOccurences = function(words){#
+#
+	occurences = rep(0, length(dictionary))#
+	for (word in words){#
+		if (word %in% dictionary){#
+			#find where in dictionary the word is#
+			word.index = which( word == dictionary) # Should return a unique index#
+			#
+			#Increment#
+			occurences[word.index] = occurences[word.index] + 1#
+			}#
+		else{#
+			#add new word to the global dictionary#
+			dictionary[length(dictionary) + 1] <<- word#
+			occurences[length(dictionary) + 1] = 1#
+		}#
+	}#
+#
+	return(occurences)#
+}#
+#
+####### Bug Occurences tends to have 1 NA at beginning########
+#
+#Takes in the full text of a file#
+#returns a vector of the words of the text#
+parseText = function(fullText){#
+	#
+	# Strip out <p>, spaces and punctuation besides '#
+	pat = "[[:alpha:][:digit:]]+"  # Not exactly sure what this pattern should be#
+	#
+	# Reg exp gibberish I don't really understand#
+	m = gregexpr(pat, fullText, ignore.case = TRUE)#
+	x = regmatches(fullText, m)#
+	x = do.call(c, x)#
+	m = regexec(pat, x, ignore.case = TRUE)#
+    words = regmatches(x, m)#
+    words = do.call(c, words)#
+#
+	#lowercase stuff#
+	words = tolower(words)#
+#
+	# words is vector of character type now#
+	#
+	return(words)#
+}#
+#
+#
+#This function takes in the words of a file and a dictionary#
+# Outputs a feature vector in the form: #
+# {dictionary.word.i: occurances} - this is a vector#
+getVector = function(fullText){#
+	#
+	# words is now a vector of all the pure words that appear in this text#
+	words = parseText(fullText)#
+	#
+	# construct the vector of occurances#
+	occ = findOccurences(words)#
+	#
+	return (occ)#
+}#
+#
+#Takes element to a directory -> a vector of XML data#
+#grabs only the useful data#
+#returns a string without any tags#
+grabFullText = function(file.root){#
+	#
+	#reads in the XML#
+	data.xml = readLines(file.root)#
+	#
+	# These are two unique XML tages which begin the full text#
+	# Note that end is 1 after the end #
+	start = "<block class=\"full_text\">"#
+	end = "</body.content>"#
+	#
+	# Search though our xml data#
+	vect.start = grep(start, data.xml) + 2 # Note add 2 because you need to remove the lead#
+	vect.end = grep(end, data.xml) -3 # Substract 2 because you need to remove the block#
+#
+	result = data.xml[seq(vect.start, vect.end)]#
+	#
+	return(paste(result, collapse = ""))#
+}#
+#
+#
+#Takes in a working directory of files#
+#Reads in all the different files and converts them into feature vectors#
+# returns a list of feature vectors with 1 vector as each file #
+getFiles = function(directory){#
+	#
+	#constructs a list of directory of files#
+	files = paste(directory, list.files(directory), sep = "/")#
+	#
+	# This should return a list of full text of content#
+	files.fullText = lapply(files, grabFullText)#
+#
+	# This should return a list of bag of words 	#
+	files.vectors = lapply(files.fullText, getVector)#
+#
+	return(files.vectors)#
+}#
+#
+#
+# This function returns a list of list of feature vectors#
+# The first list has 4 components: train art, train music, test art, test music#
+# NOTE: we are not validating our training algos for overfitting#
+# Each element in the list contains a list of vectors#
+shuffle = function(){#
+	# These roots are user dependent#
+	root.art = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/art'#
+	root.music = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/music'#
+	#
+	# calls getFiles to construct the list of vectors	#
+	list.art = getFiles(root.art)#
+	list.music = getFiles(root.music)#
+	#
+	#Shuffle both of these lists#
+	#
+	#Split both of these lists#
+	#
+	#Bind both of these lists #
+	#
+}#
+#
+#
+#
+#
+############# This is testing for all the vector constructing fucntions ################
+#
+#
+#
+#This returns two lists of vectors corresponding to our two different categories#
+root = function(){#
+	#
+	# These roots are user dependent#
+	root.art = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/art'#
+	root.music = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/music'#
+	#
+	# calls getFiles to construct the list of vectors	#
+	list.art = getFiles(root.art)#
+	list.music = getFiles(root.music)#
+	#
+# # 	#make sure that all the vectors are the same length#
+	# list.art = fill.vector(list.art)#
+	# list.music = fill.vector(list.music)#
+	#
+	return(c(list.art, list.music))#
+}#
+#
+#
+#Question How exactly do we handle a dictionary#
+#universely defined then must construct at the very beginning
+### This file should take in a dictionary and list of vectors#
+### returns a vector with the 300 most common words in no particular order#
+#
+#
+common = function(list.vecs, dictionary){#
+	total.words = rep(0, length(dictionary))#
+	for (word in seq(1,length(dictionary))){#
+		word.sum = 0#
+		for (document in list.vecs){#
+			if( !is.na(document[word])){#
+				word.sum = word.sum + document[word]#
+			}#
+		}#
+		total.words[word] = word.sum#
+	}#
+	cutoff = sort(total.words, decreasing = TRUE)[150]#
+	#
+	return(dictionary[total.words > cutoff])#
+	#
+}#
+#
+root.art = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/art'#
+root.music = '/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/nyt_corpus/music'#
+#
+files.art = getFiles(root.art)#
+files.music = getFiles(root.music)#
+#
+common.art = common(files.art, dictionary)#
+common.music = common(files.music, dictionary)#
+#
+#
+uncommon = function(words.this, words.that){#
+	result = c()#
+	for (word in words.this)#
+	{#
+		if ( word %in% words.that){ #
+			result = result#
+			}#
+		else {#
+			result = c(result, word)#
+		}#
+	}#
+	return(result)#
+}#
+#
+uncommon.art = uncommon(common.art, common.music)#
+uncommon.music = uncommon(common.music, common.art)#
+uncommon = c(uncommon.art, uncommon.music)#
+#
+get.word.indices = function(dictionary, uncommon){#
+	result = c()#
+	for (word in uncommon){#
+		result = c(result, which(dictionary == word))#
+	}#
+	return(result)#
+}#
+#
+words.indices = get.word.indices(dictionary, uncommon)#
+#
+#Takes in files and indices #
+# makes the vectors only be the uncommon word occurences#
+small.vectors = function(files, word.indices){#
+	# get the indices#
+	result = list()#
+	for (file in files){#
+		vector.new = rep(0, length(word.indices))#
+		for (index in seq(1, length(word.indices))){#
+			word.index = word.indices[index]#
+			if (is.na(file[word.index])){#
+				vector.new[index] = 0#
+			}#
+			else{#
+				vector.new[index] = file[word.index]#
+			}#
+		}#
+		result[[length(result) + 1]] = vector.new#
+	}#
+	return(result)#
+}#
+#
+files.art.small = small.vectors(files.art, words.indices)#
+files.music.small = small.vectors(files.music, words.indices)#
+#
+files.number = length(words.indices)#
+#
+df.art = data.frame(matrix(unlist(files.art.small), ncol = files.number))#
+df.music = data.frame(matrix(unlist(files.music.small), ncol = files.number))
+df.art
+df.music
+qt(.99, 6)
+qt(.95, 6)
+4.026 + .73*1.94
+4.026 - .73*1.94
+?write.table
+y = c(1, 1, 1, 1, 0 , 0 , 0 , 0)
+x = seq(1, 8)
+line = glm(y~x, family = "binomial")
+line
+df = data.frame(x, y)
+df
+sum(df)
+setwd("/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/")
+list.files()
+df = read.table("dataframe30.txt")
+df
+labels = df$cat
+length(df)
+df = df[-31,]
+df = df[-31,]
+df
+df
+df = df[-31,]
+df
+df = read.table("dataframe30.txt")
+labels = df$cat
+df = df[,-31]
+df
+apply(df[labels == 1], 1, sum)
+length(apply(df[labels == 1], 1, sum)
+_
+length(apply(df[labels == 1], 1, sum))
+length(apply(df[labels == 1], 2, sum))
+art.param = length(apply(df[labels == 1], 2, sum))
+art.param
+art.param = apply(df[labels == 1], 2, sum)
+art.param
+music.param = apply(df[labels == 0], 2, sum)
+art.param = apply(df[labels == 1,], 2, sum)
+art.param
+music.param = apply(df[labels == 0,], 2, sum)
+music.param
+cbind(art.param, music.param)
+#
+get.param = function(df, labels){#
+	total.words = sum(df)#
+	art.param = apply(df[labels == 1], 2, sum)#
+	music.param = apply(df[labels == 0], 2, sum)#
+	art.param = (art.param + 1)/(total.words + 30)#
+	music.param = (music.param + 1) / ( total.words + 30)#
+	#
+	return (cbind(art.param, music.param))#
+	#
+}
+param = get.param(df, labels)
+#
+#
+get.param = function(df, labels){#
+	total.words = sum(df)#
+	art.param = apply(df[labels == 1,], 2, sum)#
+	music.param = apply(df[labels == 0,], 2, sum)#
+	art.param = (art.param + 1)/(total.words + 30)#
+	music.param = (music.param + 1) / ( total.words + 30)#
+	#
+	return (cbind(art.param, music.param))#
+	#
+}
+param = get.param(df, labels)
+param
+NBC.predict = function(param, new.vector){#
+	#
+	p.value.music = sum(new.vector * log(param$music.param))#
+	p.value.art = sum(new.vector * log(param$art.param))#
+	#
+	if (p.value.music >= p.value.art){#
+		return (0)#
+	}#
+	else{ return(1)}#
+	#
+}
+df
+test = df[1,]
+test
+param
+NBC.predict(param, test)
+param[1,]
+NBC.predict = function(param, new.vector){#
+	#
+	p.value.music = sum(new.vector * log(param[,2]))#
+	p.value.art = sum(new.vector * log(param[,1]))#
+	#
+	if (p.value.music >= p.value.art){#
+		return (0)#
+	}#
+	else{ return(1)}#
+	#
+}
+NBC.predict(param, test)
+lables
+labels
+#
+test = function(df, labels, param){#
+	correct = 0#
+	for (index in seq(1, length(labels)){#
+		if (NBC.predict(param, df[index,]) == labels[index]){#
+			correct = correct + 1#
+		}#
+	}#
+	return (correct / length(labels))#
+}
+#
+test = function(df, labels, param){#
+	correct = 0#
+	for (index in seq(1, length(labels))){#
+		if (NBC.predict(param, df[index,]) == labels[index]){#
+			correct = correct + 1#
+		}#
+	}#
+	return (correct / length(labels))#
+}
+test(df, labels, param)
+art.test = read.table("test.art.txt")
+music.test = read.table("test.music.txt")
+art.test
+art.labels = rep(1, 27)
+art.labels
+length(art.labels)
+art.test
+test(art.test, art.labels, param)
+music.labels
+music.test
+test(music.test, seq(0, 15), param)
+test(music.test, rep(0, 15), param)
+test(art.test, rep(0, 27), param)
+art.text
+art.test
+head(art.test)
+test(art.test, rep(0, 27), param)
+names(df)
+apply(df[labels == 1,], 2, sum)
+apply(df[labels == 0,], 2, sum)
+temp = cbind( apply(df[labels == 0,], 2, sum), apply(df[labels == 1,], 2, sum))
+temp
+names(temp) = c("art")
+names(temp) = c("art", "music")
+temp
+temp = cbind( apply(df[labels == 0,], 2, sum), apply(df[labels == 1,], 2, sum))
+names(temp) c("music", "art")
+names(temp) =c("music", "art")
+temp
+temp
+temp = cbind( apply(df[labels == 0,], 2, sum), apply(df[labels == 1,], 2, sum))
+temp
+list.files()
+# Eliot Knudsen#
+# NBC Methods#
+#
+setwd("/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/")#
+df = read.table("dataframe30.txt")#
+labels = df$cat#
+df = df[,-31]#
+#
+art.test = read.table("test.art.txt")#
+music.test = read.table("test.music.txt")#
+#
+#
+NBC.getParam = function(df, labels){#
+	total.words = sum(df)#
+	art.param = apply(df[labels == 1,], 2, sum)#
+	music.param = apply(df[labels == 0,], 2, sum)#
+	art.param = (art.param + 1)/(total.words + 30)#
+	music.param = (music.param + 1) / ( total.words + 30)#
+	return (cbind(art.param, music.param))#
+}#
+#
+#
+NBC.predict = function(param, new.vector){#
+	#
+	p.value.music = sum(new.vector * log(param[,2]))#
+	p.value.art = sum(new.vector * log(param[,1]))#
+	#
+	if (p.value.music < p.value.art){#
+		return (0)#
+	}#
+	else{ return(1)}#
+	#
+}#
+#
+test = function(df, labels, param){#
+	correct = 0#
+	for (index in seq(1, length(labels))){#
+		if (NBC.predict(param, df[index,]) == labels[index]){#
+			correct = correct + 1#
+		}#
+	}#
+	return (correct / length(labels))#
+}
+names(df)
+out.words = c("museums", "opera", "images", "march")
+df[-out.words,]
+which(names(df) == out.words)
+names(df)
+which(names(df) == "museums")
+which(names(df) == "opera")
+which(names(df) == "images")
+which(names(df) == "march")
+df[-out.index,]
+out.index = c(3, 9, 8, 6)
+df[-out.index,]
+df = df[-out.index,]
+df
+names(df)
+#
+df = df[-out.index,]#
+art.test = art.test[-out.index,]#
+music.test = music.test[-out.index,]
+setwd("/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/")#
+df = read.table("dataframe30.txt")#
+labels = df$cat#
+df = df[,-31]#
+#
+art.test = read.table("test.art.txt")#
+music.test = read.table("test.music.txt")#
+#
+out.words = c("museums", "opera", "images", "march")#
+out.index = c(3, 9, 8, 6)#
+#
+df = df[-out.index,]#
+art.test = art.test[-out.index,]#
+music.test = music.test[-out.index,]
+#
+NBC.getParam = function(df, labels){#
+	total.words = sum(df)#
+	art.param = apply(df[labels == 1,], 2, sum)#
+	music.param = apply(df[labels == 0,], 2, sum)#
+	art.param = (art.param + 1)/(total.words + 30)#
+	music.param = (music.param + 1) / ( total.words + 27)#
+	return (cbind(art.param, music.param))#
+}
+param = NBC.getParam(df, labels)
+#
+NBC.predict = function(param, new.vector){#
+	#
+	p.value.music = sum(new.vector * log(param[,2]))#
+	p.value.art = sum(new.vector * log(param[,1]))#
+	#
+	if (p.value.music < p.value.art){#
+		return (0)#
+	}#
+	else{ return(1)}#
+	#
+}
+#
+test = function(df, labels, param){#
+	correct = 0#
+	for (index in seq(1, length(labels))){#
+		if (NBC.predict(param, df[index,]) == labels[index]){#
+			correct = correct + 1#
+		}#
+	}#
+	return (correct / length(labels))#
+}
+test(df, labels, param)
+labels
+df
+test = df[,1]
+test
+test = df[1,]
+test
+NBC.predict(param, test)
+param
+#
+NBC.getParam = function(df, labels){#
+	total.words = sum(df)#
+	art.param = apply(df[labels == 1,], 2, sum)#
+	music.param = apply(df[labels == 0,], 2, sum)#
+	art.param = (art.param + 1)/(total.words + 27)#
+	music.param = (music.param + 1) / ( total.words + 27)#
+	return (cbind(art.param, music.param))#
+}
+param = NBC.getParam(df, labels)
+param
+music.param = apply(df[labels == 0,], 2, sum)
+music.param
+labels
+art.param = apply(df[labels == 1,], 2, sum)
+art.param
+art.param = apply(df[labels == 0,], 2, sum)
+art.param
+labels
+names(df)
+length(df)
+df = df[-out.index,]
+df
+names(df)
+length(df)
+df[1,]
+#
+art.test = read.table("test.art.txt")#
+music.test = read.table("test.music.txt")#
+#
+out.words = c("museums", "opera", "images", "march")#
+out.index = c(3, 9, 8, 6)#
+#
+df = df[,-out.index]#
+art.test = art.test[,-out.index]#
+music.test = music.test[,-out.index]
+# Eliot Knudsen#
+# NBC Methods#
+#
+setwd("/Users/eliotknudsen/Documents/Fall2011/statisticalComputing/Project/")#
+df = read.table("dataframe30.txt")#
+labels = df$cat#
+df = df[,-31]#
+#
+art.test = read.table("test.art.txt")#
+music.test = read.table("test.music.txt")#
+#
+out.words = c("museums", "opera", "images", "march")#
+out.index = c(3, 9, 8, 6)#
+#
+df = df[,-out.index]#
+art.test = art.test[,-out.index]#
+music.test = music.test[,-out.index]
+param =NBC.getParam(df, labels)
+parma
+param
+test(df, labels, param)
+#
+test = function(df, labels, param){#
+	correct = 0#
+	for (index in seq(1, length(labels))){#
+		if (NBC.predict(param, df[index,]) == labels[index]){#
+			correct = correct + 1#
+		}#
+	}#
+	return (correct / length(labels))#
+}
+test(df, labels, param)
+#
+NBC.predict = function(param, new.vector){#
+	#
+	p.value.music = sum(new.vector * log(param[,2]))#
+	p.value.art = sum(new.vector * log(param[,1]))#
+	#
+	if (p.value.music > p.value.art){#
+		return (0)#
+	}#
+	else{ return(1)}#
+	#
+}
+test(df, labels, param)
+names(df)
+test(art.test, rep(1, 27), param)
+test(music.test, rep(0, 27), param)
+test(music.test, rep(0, 17), param)
+test(music.test, rep(0, 15), param)
+test
+temp = art.test[1,]
+temp
+sum(temp * log(param[,2]))
+sum(temp * log(param[,1]))
+#
+NBC.predict = function(param, new.vector){#
+	#
+	p.value.music = sum(new.vector * log(param[,2]))#
+	p.value.art = sum(new.vector * log(param[,1]))#
+	#
+	if (abs(p.value.music) > abs(p.value.art)){#
+		return (0)#
+	}#
+	else{ return(1)}#
+	#
+}
+test(music.test, rep(0, 15), param)
+test(art.test, rep(1, 27), param)
+temp1 = .266666
+temp2 = .8148
+temp1* 15 /(15 + 27) + temp2 *27/(15+27)
